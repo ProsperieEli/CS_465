@@ -27,9 +27,32 @@ const tripsList = async (req, res) => {
     }
 };
 
+const tripsAddtrip = async (req, res) => {
+    const NewTrip = new Model({
+        code: req.body.code,
+        name: req.body.name,
+        length: req.body.length,
+        start: req.body.start,
+        resort: req.body.resort,
+        perPerson: req.body.perPerson,
+        image: req.body.image,
+        description: req.body.description
+    });
+    
+    const q = await NewTrip.save();
+    if (!q) {
+        return res
+            .status(400)
+            .json(err)
+    } else {
+        return res
+            .status(201)
+            .json(q);
+    };
+}
 // GET: /trips/:tripCode - lists a single trip
 // Filters by the specific route parameter code
-const tripsFindByCode = async (req, res) => {
+    const tripsFindByCode = async (req, res) => {
     try {
         const q = await Model
             .find({ 'code' : req.params.tripCode }) // Return single record
@@ -52,9 +75,49 @@ const tripsFindByCode = async (req, res) => {
     }
 };
 
+// PUT: /trips/:tripCode - Updates an existing trip
+// Returns an HTTP status code and JSON response
+const tripsUpdateTrip = async (req, res) => {
+    // Uncomment for debugging
+    // console.log(req.params);
+    // console.log(req.body);
+
+    try {
+        const q = await Model
+            .findOneAndUpdate(
+                { code: req.params.tripCode },
+                {
+                    code: req.body.code,
+                    name: req.body.name,
+                    length: req.body.length,
+                    start: req.body.start,
+                    resort: req.body.resort,
+                    perPerson: req.body.perPerson,
+                    image: req.body.image,
+                    description: req.body.description
+                },
+                { new: true, runValidators: true }
+            )
+            .exec();
+
+        if (!q) {
+            return res.status(404).json({
+                message: `Trip with code '${req.params.tripCode}' not found`
+            });
+        }
+
+        return res.status(200).json(q);
+    } catch (err) {
+        return res.status(400).json({
+            message: err.message
+        });
+    }
+};
 // Exporting both functions so they can be mapped to your routes
 module.exports = {
     tripsList,
-    tripsFindByCode
+    tripsFindByCode,
+    tripsAddtrip,
+    tripsUpdateTrip
 };
 
