@@ -1,14 +1,13 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {TripListing} from './trip-listing/trip-listing';
+import { Navbar } from './navbar/navbar';
 
 @Component({
-  imports: [RouterOutlet, TripListing],
+  imports: [RouterOutlet, Navbar],
   selector: 'app-root',
   styleUrl: './app.css',
-  templateUrl: './app.html',
+  templateUrl: './app.html'
 })
 export class App {
-  title =
-    ('Travlr Getaways Admin!');
+  title = 'Travlr Getaways Admin!';
 }

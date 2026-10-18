@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Trip } from '../models/trip';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { User } from '../models/user';
+import { AuthResponse } from '../models/auth-response';
 
 @Injectable({
   providedIn: 'root',
@@ -31,4 +33,25 @@ export class TripData {
       trip
     );
   }
+
+  login(user: User, password: string): Observable<AuthResponse> {
+  return this.http.post<AuthResponse>(
+    'http://localhost:3000/api/login',
+    {
+      email: user.email,
+      password
+    }
+  );
+}
+
+register(user: User, password: string): Observable<AuthResponse> {
+  return this.http.post<AuthResponse>(
+    'http://localhost:3000/api/register',
+    {
+      name: user.name,
+      email: user.email,
+      password
+    }
+  );
+}
 }

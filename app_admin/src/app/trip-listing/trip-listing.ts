@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { TripCard } from '../trip-card/trip-card';
 import { Trip } from '../models/trip';
 import { TripData } from '../services/trip-data';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
+import { Authentication } from '../services/authentication.service';
+
 
 @Component({
   imports: [CommonModule, TripCard],
@@ -19,13 +21,18 @@ export class TripListing implements OnInit {
 constructor(
   private tripData: TripData,
   private cd: ChangeDetectorRef,
-  private router: Router
+  private router: Router,
+  private authenticationService: Authentication
 ) {
   console.log('trip-listing constructor');
 }
   public AddTrip(): void {
     this.router.navigate(['add-trip']);
   }
+
+  public isLoggedIn(): boolean {
+  return this.authenticationService.isLoggedIn();
+}
   
   private getStuff(): void {
     this.tripData.getTrips().subscribe({
